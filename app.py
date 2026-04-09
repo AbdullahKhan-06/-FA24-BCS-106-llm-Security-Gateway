@@ -13,10 +13,10 @@ app = FastAPI(title="LLM Security Gateway", version="2.0")
 class UserInput(BaseModel):
     text: str
 
-# 🔹 Define CSV file path (absolute path)
+
 CSV_FILE = os.path.join(os.getcwd(), "evaluation_log.csv")
 
-# 🔹 Create file with header if it does not exist
+
 if not os.path.exists(CSV_FILE):
     with open(CSV_FILE, mode="w", newline="") as file:
         writer = csv.writer(file)
@@ -28,7 +28,7 @@ if not os.path.exists(CSV_FILE):
             "Latency",
             "Risk Level"
         ])
-    print("✅ CSV file created at:", CSV_FILE)
+    print(" CSV file created at:", CSV_FILE)
 
 
 @app.post("/process")
@@ -37,18 +37,17 @@ def process_input(user_input: UserInput):
 
     text = user_input.text
 
-    # 🔹 Step 1: Injection Detection
+    
     injection_score, matches = detect_injection(text)
 
-    # 🔹 Step 2: PII Detection
+  
     pii_results = analyze_pii(text)
 
-    # 🔹 Step 3: Policy Decision
+  
     decision = decide_policy(injection_score, pii_results)
 
-    # 🔹 Step 4: Output Handling
     if decision == "BLOCK":
-        output = "⚠️ Request blocked due to suspected prompt injection attack."
+        output = " Request blocked due to suspected prompt injection attack."
 
     elif decision == "MASK":
         output = anonymize_text(text, pii_results)
@@ -56,10 +55,10 @@ def process_input(user_input: UserInput):
     else:
         output = text
 
-    # 🔹 Latency Calculation
+
     latency = round(time.time() - start_time, 4)
 
-    # 🔹 Risk Level
+  
     if injection_score >= 4:
         risk_level = "HIGH"
     elif injection_score >= 2:
@@ -67,7 +66,7 @@ def process_input(user_input: UserInput):
     else:
         risk_level = "LOW"
 
-    # 🔹 Save Results to CSV
+
     try:
         with open(CSV_FILE, mode="a", newline="") as file:
             writer = csv.writer(file)
@@ -79,9 +78,9 @@ def process_input(user_input: UserInput):
                 latency,
                 risk_level
             ])
-        print("✅ Data written to CSV")
+        print(" Data written to CSV")
     except Exception as e:
-        print("❌ Error writing CSV:", e)
+        print(" Error writing CSV:", e)
 
     return {
         "decision": decision,
