@@ -1,13 +1,11 @@
 from presidio_analyzer import AnalyzerEngine, PatternRecognizer, Pattern
 from presidio_anonymizer import AnonymizerEngine
 
-# Initialize engines
+
 analyzer = AnalyzerEngine()
 anonymizer = AnonymizerEngine()
 
-# -------------------------------
-# 🔹 Custom Recognizer 1: API Key
-# -------------------------------
+
 api_key_pattern = Pattern(
     name="api_key_pattern",
     regex=r"sk-[A-Za-z0-9]{20,}",
@@ -21,9 +19,7 @@ api_key_recognizer = PatternRecognizer(
 
 analyzer.registry.add_recognizer(api_key_recognizer)
 
-# ----------------------------------------
-# 🔹 Custom Recognizer 2: Pakistani Phone
-# ----------------------------------------
+
 phone_pattern = Pattern(
     name="pk_phone",
     regex=r"03[0-9]{9}",
@@ -37,9 +33,7 @@ phone_recognizer = PatternRecognizer(
 
 analyzer.registry.add_recognizer(phone_recognizer)
 
-# -------------------------------
-# 🔹 Analyze PII
-# -------------------------------
+
 def analyze_pii(text):
     results = analyzer.analyze(text=text, language='en')
 
@@ -48,9 +42,7 @@ def analyze_pii(text):
 
     return filtered_results
 
-# -------------------------------
-# 🔹 Anonymize Text
-# -------------------------------
+
 def anonymize_text(text, results):
     # Custom masking logic
     masked_text = text
